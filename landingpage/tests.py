@@ -8,4 +8,4 @@ class BasicTests(TestCase):
 
     def test_homepage_content(self):
         response = self.client.get(reverse('hola_mundo'))
-        self.assertContains(response, "<h1>HOLA MUNDO CON CI/CD CON GITHUB ACTIONS 18 de junio 2025 -v3 CON NOTIFICACIONES EMAIL</h1>")
+        self.assertContains(response, "HOLA CI CD CON NOTIFICAICONES EN GITHUB ACTIONS")

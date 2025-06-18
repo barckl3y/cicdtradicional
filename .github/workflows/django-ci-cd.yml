@@ -89,8 +89,8 @@ jobs:
             lsof -t -i tcp:8001 | xargs kill -9
             screen -dmS runServerCICD gunicorn --timeout 300 --bind 0.0.0.0:8001 cicdtradicional.wsgi
 
-      - name: Notify by Email on Deploy Success
-        if: success()
+      - name: Enviar email de notificación
+        id: enviar_mail
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
@@ -99,7 +99,12 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: ✅ Despliegue exitoso en producción
           body: |
-            El código se desplegó correctamente en tu servidor con éxito.
+            El código se desplegó correctamente.
           to: ${{ secrets.EMAIL_TO }}
           from: GitHub Actions <${{ secrets.EMAIL_FROM }}>
+
+      - name: Confirmar si el correo se envió
+        if: success() && steps.enviar_mail.outcome == 'success'
+        run: echo "✅ El correo fue enviado exitosamente"
+
 
