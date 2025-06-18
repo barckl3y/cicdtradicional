@@ -71,4 +71,6 @@ jobs:
             if screen -list | grep -q "runServerCICD"; then
                 screen -S runServerCICD -X quit
             fi
+            cd /var/beta/env_cicdtradicional/cicdtradicional
+            lsof -t -i tcp:8001 | xargs kill -9
             screen -dmS runServerCICD gunicorn --timeout 300 --bind 0.0.0.0:8001 cicdtradicional.wsgi
