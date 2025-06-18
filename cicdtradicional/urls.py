@@ -20,5 +20,5 @@ from landingpage.views import hola_mundo
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', hola_mundo),
+    path('', hola_mundo, name='hola_mundo'),
 ]

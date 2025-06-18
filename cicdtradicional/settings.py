@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-gbpwo_t%=(6hb6&d7=gsc88+)1+b!3&2x%7h@83*%6p2pcq8_-'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "clave_por_defecto")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "0") == "1"
 
 ALLOWED_HOSTS = ['127.0.0.1','barckl3y.dev']
 
@@ -74,21 +77,16 @@ WSGI_APPLICATION = 'cicdtradicional.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cicdtradicional_bd',
-        'USER': 'cicdtradicional_user_bd_root',
-        'PASSWORD': 'cicdtradicional_pass_1986@_12345',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'nombre_defecto'),
+        'USER': os.getenv('DB_USER', 'usuario_defecto'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'clave_defecto'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
