@@ -46,6 +46,20 @@ jobs:
       - name: Run tests
         run: python manage.py test
 
+      - name: Notify by Email on Failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.EMAIL_FROM }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: ❌ Falló la integración de Django
+          body: |
+            El workflow falló en CI/CD. Revisa los tests.
+          to: ${{ secrets.EMAIL_TO }}
+          from: GitHub Actions <${{ secrets.EMAIL_FROM }}>
+
   deploy:
     needs: test  # solo corre si test pasa
     runs-on: ubuntu-latest
@@ -74,3 +88,18 @@ jobs:
             cd /var/beta/env_cicdtradicional/cicdtradicional
             lsof -t -i tcp:8001 | xargs kill -9
             screen -dmS runServerCICD gunicorn --timeout 300 --bind 0.0.0.0:8001 cicdtradicional.wsgi
+
+      - name: Notify by Email on Deploy Success
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.EMAIL_FROM }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: ✅ Despliegue exitoso en producción
+          body: |
+            El código se desplegó correctamente en tu servidor con éxito.
+          to: ${{ secrets.EMAIL_TO }}
+          from: GitHub Actions <${{ secrets.EMAIL_FROM }}>
+
